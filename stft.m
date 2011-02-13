@@ -1,4 +1,4 @@
-function D = stft(x, f, w, h, sr)
+function D = stft(x, f, w, h, sr, filt)
 % D = stft(X, F, W, H, SR)                       Short-time Fourier transform.
 %	Returns some frames of short-term Fourier transform of x.  Each 
 %	column of the result is one F-point fft (default 256); each
@@ -53,15 +53,23 @@ c = 1;
 
 % pre-allocate output array
 d = zeros((1+f/2),1+fix((s-f)/h));
+scale = ones(1, f);
 
+for i=1:size(filt, 1)
+    lo = floor(f / 2 * filt(i, 1) / (sr/2)) + 1;
+    if (filt(i, 2) == -1)
+        hi = f;
+    else
+        hi = floor(f / 2 * filt(i, 2) / (sr/2)) + 1;
+    end
+    scale(lo:hi) = filt(i, 3);
+end
 for b = 0:h:(s-f)
   u = win.*x((b+1):(b+f));
   t = fft(u);
   
   % FILTERS APPLIED HERE
-  lo = floor(f / 2 * 0 / (sr/2)) + 1;
-  hi = floor(f / 2 * 1000 / (sr/2)) + 1;
-  t(lo:hi) = t(lo:hi) * 0;
+  t = t .* scale;
   
   d(:,c) = t(1:(1+f/2))';
   c = c+1;
