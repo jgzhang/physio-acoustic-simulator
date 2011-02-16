@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 10-Feb-2011 13:34:11
+% Last Modified by GUIDE v2.5 15-Feb-2011 22:21:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -182,32 +182,14 @@ if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColo
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
 
-
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-f = get(handles.slider1, 'Value');
-fprintf('Slider 1: %f\n', f);
-f = get(handles.slider2, 'Value');
-fprintf('Slider 2: %f\n', f);
-f = get(handles.slider3, 'Value');
-fprintf('Slider 3: %f\n', f);
-f = get(handles.slider4, 'Value');
-fprintf('Slider 4: %f\n', f);
-f = get(handles.slider5, 'Value');
-fprintf('Slider 5: %f\n', f);
-f = get(handles.slider6, 'Value');
-fprintf('Slider 6: %f\n', f);
-
-% --- Executes on button press in pushbutton2.
-function pushbutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2 (see GCBO)
+% --- Executes on button press in filt_run.
+function filt_run_Callback(hObject, eventdata, handles)
+% hObject    handle to filt_run (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-[audio, sr] = wavread('male.wav');
+file = get(handles.audio_file_input, 'String');
+[audio, sr] = wavread(file);
 f = [0 300 0; 300 700 0; 700 1500 0; 1500 3000 0; 3000 6000 0; 6000 -1 0];
 f(1, 3) = get(handles.slider1, 'Value');
 f(2, 3) = get(handles.slider2, 'Value');
@@ -221,13 +203,25 @@ for i=1:size(audio, 2)
     y = stft(audio(:, i), 256, 256, 0, sr, f);
     audio_re(:, i) = istft(y);
 end
-wavwrite(audio_re, sr, 'test_filt.wav');
 
-figure(1);
-specgram(audio(1:10000, 1));
-figure(2);
-specgram(audio_re(1:10000, 1));
+[~, F, T, P] = spectrogram(audio(1:10000, 1), 256, 250, 256, sr);
+surf(handles.orig_axes, T, F, 10*log10(P), 'edgecolor', 'none');
+view(handles.orig_axes, 0, 90);
+axis(handles.orig_axes, 'tight');
+xlabel(handles.orig_axes, 'Time (seconds)');
+ylabel(handles.orig_axes, 'Hz');
 
+[~, F, T, P] = spectrogram(audio_re(1:10000, 1), 256, 250, 256, sr);
+surf(handles.filt_axes, T, F, 10*log10(P), 'edgecolor', 'none');
+view(handles.filt_axes, 0, 90);
+axis(handles.filt_axes, 'tight');
+xlabel(handles.filt_axes, 'Time (seconds)');
+ylabel(handles.filt_axes, 'Hz');
+
+handles.orig_audio = audio;
+handles.sr = sr;
+handles.filt_audio = audio_re;
+guidata(hObject, handles);
 
 % --- Executes on slider movement.
 function slider6_Callback(hObject, eventdata, handles)
@@ -249,3 +243,52 @@ function slider6_CreateFcn(hObject, eventdata, handles)
 if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor',[.9 .9 .9]);
 end
+
+
+
+function audio_file_input_Callback(hObject, eventdata, handles)
+% hObject    handle to audio_file_input (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of audio_file_input as text
+%        str2double(get(hObject,'String')) returns contents of audio_file_input as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function audio_file_input_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to audio_file_input (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in orig_play.
+function orig_play_Callback(hObject, eventdata, handles)
+% hObject    handle to orig_play (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Only play first 2 seconds
+wavplay(handles.orig_audio(1:(handles.sr*2), :), handles.sr, 'async');
+
+% --- Executes on button press in filt_play.
+function filt_play_Callback(hObject, eventdata, handles)
+% hObject    handle to filt_play (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Only play first 2 seconds
+wavplay(handles.filt_audio(1:(handles.sr*2), :), handles.sr, 'async');
+
+
+% --- Executes on button press in audiogram_run.
+function audiogram_run_Callback(hObject, eventdata, handles)
+% hObject    handle to audiogram_run (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
