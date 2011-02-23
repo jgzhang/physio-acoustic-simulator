@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 15-Feb-2011 22:21:29
+% Last Modified by GUIDE v2.5 22-Feb-2011 15:11:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -292,3 +292,19 @@ function audiogram_run_Callback(hObject, eventdata, handles)
 % hObject    handle to audiogram_run (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in explore.
+function explore_Callback(hObject, eventdata, handles)
+% hObject    handle to explore (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+[fileName,pathName] = uigetfile('*.wav','Select the sound file');
+if isequal(fileName,0)
+   set(handles.audio_file_input,'String','no file selected');
+else
+   set(handles.audio_file_input,'String',fullfile(pathName, fileName));
+end
+
+
+
