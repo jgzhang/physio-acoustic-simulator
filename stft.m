@@ -1,4 +1,4 @@
-function D = stft(x, f, w, h, sr, filt)
+function D = stft(x, f, w, h, sr, filt_mode, filt_vec, filt_num)
 % D = stft(X, F, W, H, SR)                       Short-time Fourier transform.
 %	Returns some frames of short-term Fourier transform of x.  Each 
 %	column of the result is one F-point fft (default 256); each
@@ -53,21 +53,42 @@ c = 1;
 
 % pre-allocate output array
 d = zeros((1+f/2),1+fix((s-f)/h));
-scale = ones(1, f);
 
-for i=1:size(filt, 1)
-    lo = floor(f / 2 * filt(i, 1) / (sr/2)) + 1;
-    if (filt(i, 2) == -1)
-        hi = f;
-    else
-        hi = floor(f / 2 * filt(i, 2) / (sr/2)) + 1;
+if (strcmp('audiogram', filt_mode)) filt_mode = 1;
+elseif (strcmp('cochlear', filt_mode)) filt_mode = 2;
+end   
+% Generate filter
+if (filt_mode == 1)
+    scale = ones(1, f);
+    for i=1:size(filt_vec, 1)
+        lo = floor(f / 2 * filt_vec(i, 1) / (sr/2)) + 1;
+        if (filt_vec(i, 2) == -1)
+            hi = f;
+        else
+            hi = floor(f / 2 * filt_vec(i, 2) / (sr/2)) + 1;
+        end
+        scale(lo:hi) = filt_vec(i, 3);
     end
-    scale(lo:hi) = filt(i, 3);
+elseif (filt_mode == 2)
+    filt_len = size(filt_vec, 1);
+    filt = floor(filt_vec .* f/2 ./ (sr/2)) + 1;
+    avgs = zeros(filt_len,1);
 end
+
 for b = 0:h:(s-f)
   u = win.*x((b+1):(b+f));
   t = fft(u);
   
+  if (filt_mode == 2)
+      for i = 1:filt_len
+          avgs(i) = mean(t(filt(i,1):filt(i,2)));
+      end
+      [~, I] = sort(avgs, 1, 'descend');
+      scale = ones(1, length(t));
+      for i=filt_num+1:filt_len
+          scale(1,filt(I(i),1):filt(I(i),2)) = 0;
+      end
+  end
   % FILTERS APPLIED HERE
   t = t .* scale;
   

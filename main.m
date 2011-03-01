@@ -200,7 +200,7 @@ f(6, 3) = get(handles.slider6, 'Value');
 %audio_re = zeros(size(audio));
 
 for i=1:size(audio, 2)
-    y = stft(audio(:, i), 256, 256, 0, sr, f);
+    y = stft(audio(:, i), 256, 256, 0, sr, 'audiogram', f);
     audio_re(:, i) = istft(y);
 end
 

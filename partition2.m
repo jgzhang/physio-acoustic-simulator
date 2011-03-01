@@ -1,8 +1,10 @@
-function out = partition2( count)
+function out = partition2(count,max)
 %PARTITION2 Summary of this function goes here
 %   outputs list of partitions that increase in size exponentially.
 %   if partition one is of size 1, the following partitions will be of size
 %   2,4,8,16 etc.
+
+if nargin < 2; max = 10000; end
 if(size(count) ~= 1)
     error('variable count must be a single integer)');
 end
@@ -17,7 +19,7 @@ for i=1:count-1;
 end
 
 temp = 1;
-temp1 = 10000 / sum;
+temp1 = (max-1) / sum;
 
 out = [];
 
