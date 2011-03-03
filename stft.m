@@ -83,14 +83,18 @@ for b = 0:h:(s-f)
       for i = 1:filt_len
           avgs(i) = mean(t(filt(i,1):filt(i,2)));
       end
-      [~, I] = sort(avgs, 1, 'descend');
-      scale = ones(1, length(t));
-      for i=filt_num+1:filt_len
-          scale(1,filt(I(i),1):filt(I(i),2)) = 0;
+      [avgs, I] = sort(avgs, 1, 'descend');
+      t = zeros(1, length(t));
+      for i=1:filt_num
+          lo = filt(I(i),1);
+          hi = filt(I(i),2);
+          t(floor((lo+hi)/2)) = avgs(i);
       end
+  else  
+    % FILTERS APPLIED HERE
+    t = t .* scale;
   end
-  % FILTERS APPLIED HERE
-  t = t .* scale;
+  
   
   d(:,c) = t(1:(1+f/2))';
   c = c+1;
