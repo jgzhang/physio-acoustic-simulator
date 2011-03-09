@@ -72,7 +72,7 @@ if (filt_mode == 1)
 elseif (filt_mode == 2)
     filt_len = size(filt_vec, 1);
     filt = floor(filt_vec .* f/2 ./ (sr/2)) + 1;
-    avgs = zeros(filt_len,1);
+    peaks = zeros(filt_len,1);
 end
 
 for b = 0:h:(s-f)
@@ -81,14 +81,14 @@ for b = 0:h:(s-f)
   
   if (filt_mode == 2)
       for i = 1:filt_len
-          avgs(i) = mean(t(filt(i,1):filt(i,2)));
+          peaks(i) = max(t(filt(i,1):filt(i,2)));
       end
-      [avgs, I] = sort(avgs, 1, 'descend');
+      [peaks, I] = sort(peaks, 1, 'descend');
       t = zeros(1, length(t));
       for i=1:filt_num
           lo = filt(I(i),1);
           hi = filt(I(i),2);
-          t(floor((lo+hi)/2)) = avgs(i);
+          t(floor((lo+hi)/2)) = peaks(i);
       end
   else  
     % FILTERS APPLIED HERE
