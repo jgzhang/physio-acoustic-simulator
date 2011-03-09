@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 22-Feb-2011 15:11:36
+% Last Modified by GUIDE v2.5 08-Mar-2011 21:04:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -307,4 +307,60 @@ else
 end
 
 
+% --- Executes on button press in Stop_sound.
+function Stop_sound_Callback(hObject, eventdata, handles)
+% hObject    handle to Stop_sound (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+clear playsnd;
 
+
+% --- Executes on button press in No_Filter_button.
+function No_Filter_button_Callback(hObject, eventdata, handles)
+% hObject    handle to No_Filter_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.slider1,'Value',1.0);
+set(handles.slider2,'Value',1.0);
+set(handles.slider3,'Value',1.0);
+set(handles.slider4,'Value',1.0);
+set(handles.slider5,'Value',1.0);
+set(handles.slider6,'Value',1.0);
+
+% --- Executes on button press in All_Filtered_Button.
+function All_Filtered_Button_Callback(hObject, eventdata, handles)
+% hObject    handle to All_Filtered_Button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.slider1,'Value',0.0);
+set(handles.slider2,'Value',0.0);
+set(handles.slider3,'Value',0.0);
+set(handles.slider4,'Value',0.0);
+set(handles.slider5,'Value',0.0);
+set(handles.slider6,'Value',0.0);
+
+
+% --- Executes on button press in Old_Age_Sample.
+function Old_Age_Sample_Callback(hObject, eventdata, handles)
+% hObject    handle to Old_Age_Sample (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.slider1,'Value',0.9);
+set(handles.slider2,'Value',0.9);
+set(handles.slider3,'Value',0.8);
+set(handles.slider4,'Value',0.6);
+set(handles.slider5,'Value',0.45);
+set(handles.slider6,'Value',0.6);
+
+
+% --- Executes on button press in pushbutton14.
+function pushbutton14_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton14 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.slider1,'Value',0.5);
+set(handles.slider2,'Value',0.55);
+set(handles.slider3,'Value',0.55);
+set(handles.slider4,'Value',0.4);
+set(handles.slider5,'Value',0.5);
+set(handles.slider6,'Value',0.4);
