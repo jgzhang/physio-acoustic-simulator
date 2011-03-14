@@ -56,7 +56,8 @@ d = zeros((1+f/2),1+fix((s-f)/h));
 
 if (strcmp('audiogram', filt_mode)) filt_mode = 1;
 elseif (strcmp('cochlear', filt_mode)) filt_mode = 2;
-end   
+end
+
 % Generate filter
 if (filt_mode == 1)
     scale = ones(1, f);
@@ -67,7 +68,13 @@ if (filt_mode == 1)
         else
             hi = floor(f / 2 * filt_vec(i, 2) / (sr/2)) + 1;
         end
-        scale(lo:hi) = filt_vec(i, 3);
+        % 0 maps to 0
+        % (0,1] maps to (0.001,1]
+        if (filt_vec(i,3) == 0)
+            scale(lo:hi) = 0;
+        else
+            scale(lo:hi) = db2mag((filt_vec(i, 3) - 1) * 60);
+        end
     end
 elseif (filt_mode == 2)
     filt_len = size(filt_vec, 1);
