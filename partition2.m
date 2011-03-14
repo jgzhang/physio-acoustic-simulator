@@ -15,7 +15,6 @@ temp = 1;
 for i=1:count-1;
     temp = temp *2;
     sum = sum + temp;
-    fprintf('sum:%d temp:%d \n', sum, temp);
 end
 
 temp = 1;
