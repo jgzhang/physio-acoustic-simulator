@@ -236,6 +236,8 @@ else
     end
 end
 
+audio_re = audio_re .* (max(audio)/max(audio_re));
+
 [~, F, T, P] = spectrogram(audio(1:10000, 1), 256, 250, 256, sr);
 surf(handles.orig_axes, T, F, 10*log10(P), 'edgecolor', 'none');
 view(handles.orig_axes, 0, 90);
