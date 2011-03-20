@@ -1,3 +1,8 @@
+% Physio-Acoustic Simulator
+%
+% This code is adapted from
+% http://www.ee.columbia.edu/~dpwe/resources/matlab/pvoc/
+
 function D = stft(x, f, w, h, sr, filt_mode, filt_vec, filt_num)
 % D = stft(X, F, W, H, SR)                       Short-time Fourier transform.
 %	Returns some frames of short-term Fourier transform of x.  Each 

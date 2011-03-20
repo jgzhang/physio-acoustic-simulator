@@ -1,27 +1,13 @@
+% Physio-Acoustic Simulator
+%
+% Scott Alspach, Trevor Head, and Rob McClure
+%
+% Main file, containing GUI initialization
+% and callbacks
+%
+% Code for the GUI can be found in main.fig
+
 function varargout = main(varargin)
-% MAIN M-file for main.fig
-%      MAIN, by itself, creates a new MAIN or raises the existing
-%      singleton*.
-%
-%      H = MAIN returns the handle to a new MAIN or the handle to
-%      the existing singleton*.
-%
-%      MAIN('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in MAIN.M with the given input arguments.
-%
-%      MAIN('Property','Value',...) creates a new MAIN or raises the
-%      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before main_OpeningFcn gets called.  An
-%      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to main_OpeningFcn via varargin.
-%
-%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
-%      instance to run (singleton)".
-%
-% See also: GUIDE, GUIDATA, GUIHANDLES
-
-% Edit the above text to modify the response to help main
-
 % Last Modified by GUIDE v2.5 14-Mar-2011 13:15:58
 
 % Begin initialization code - DO NOT EDIT
@@ -238,14 +224,21 @@ end
 
 audio_re = audio_re .* (max(audio)/max(audio_re));
 
-[~, F, T, P] = spectrogram(audio(1:10000, 1), 256, 250, 256, sr);
+max_size = min([size(audio,1), size(audio_re,1)]);
+i_beg = floor(max_size / 2);
+i_end = i_beg + sr * 2;
+if i_end > max_size
+    i_end = max_size;
+end
+
+[~, F, T, P] = spectrogram(audio(i_beg:i_end, 1), 256, 250, 256, sr);
 surf(handles.orig_axes, T, F, 10*log10(P), 'edgecolor', 'none');
 view(handles.orig_axes, 0, 90);
 axis(handles.orig_axes, 'tight');
 xlabel(handles.orig_axes, 'Time (seconds)');
 ylabel(handles.orig_axes, 'Hz');
 
-[~, F, T, P] = spectrogram(audio_re(1:10000, 1), 256, 250, 256, sr);
+[~, F, T, P] = spectrogram(audio_re(i_beg:i_end, 1), 256, 250, 256, sr);
 surf(handles.filt_axes, T, F, 10*log10(P), 'edgecolor', 'none');
 view(handles.filt_axes, 0, 90);
 axis(handles.filt_axes, 'tight');
