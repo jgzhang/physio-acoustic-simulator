@@ -1,3 +1,8 @@
+% Physio-Acoustic Simulator
+%
+% This code is adapted from
+% http://www.ee.columbia.edu/~dpwe/resources/matlab/pvoc/
+
 function x = istft(d, ftsize, w, h)
 % X = istft(D, F, W, H)                   Inverse short-time Fourier transform.
 %	Performs overlap-add resynthesis from the short-time Fourier transform 

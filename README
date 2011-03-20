@@ -1,0 +1,14 @@
+This application is from the Physio-Acoustic Simulator project,
+which was developed as part of the Winter 2011 Sound Capstone class
+at the University of Washington.
+
+It is released under a MIT license.
+
+This code and information about the project can be found at
+http://code.google.com/p/physio-acoustic-simulator/.
+
+The application requires Matlab to run, and has been tested on
+Matlab R2009b under Windows 7 64-bit.
+
+To run, execute the main function from the main.m file
+in Matlab.

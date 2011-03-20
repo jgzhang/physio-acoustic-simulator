@@ -1,3 +1,8 @@
+% Physio-Acoustic Simulator
+%
+% Code for partitioning a range of frequencies
+% using exponentially growing range sizes
+
 function out = partition2(count,max)
 %PARTITION2 Summary of this function goes here
 %   outputs list of partitions that increase in size exponentially.
